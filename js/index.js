@@ -66,7 +66,7 @@ function shufImg() {
     }
     return listImagesShuffle;
 }
-//заполняет таблицу картинками или рубашками
+//заполняет таблицу  рубашками
 function initGame() {
     //shuffle(listImages);
     for(let i = 0; i < 16; i++){
@@ -94,19 +94,48 @@ function shuffle(array) {
     return array;
 }
 
+//Счетчик открытых карточек
+let counter = 0;
+let clickId_1 = "";
+let clickId_2 = "";
+//Счетчик одновременно открытых карточек
+let counterOpen = 0;
+//Обновляет таблицу с картачками по клику
 function onklickFunction(clickId) {
+    counter +=1;
+    if(counter == 1){
+        clickId_1 = clickId;
+        console.log(clickId_1);
+    }else{
+        clickId_2 = clickId;
+        counter = 0;
+        console.log(clickId_2);
+    }
+    //Обновляет таблицу с карточками 
     for(let i = 0; i < 16; i++){
         let cellId = "cell" + i;
-        for(let j = 0; j < 16; j++){
-            let deleteElement = document.getElementById(cellId);
-            deleteElement.innerHTML ="";
-        }
-        if(clickId == cellId){
+
+        let deleteElement = document.getElementById(cellId);
+        deleteElement.innerHTML ="";
+
+        if((clickId_1 == cellId) || (clickId_2 == cellId)){
             let img = document.createElement('img');
             //img.src = listImages[i];
             img.src = listImagesShuffle[cellId];
             let parentElement = document.getElementById(cellId);
             parentElement.appendChild(img);
+            //Проверка одновремнно открытых карточек и сравнивает их
+            counterOpen += 1;
+            if(counterOpen == 2){
+                counterOpen = 0;
+                if(listImagesShuffle[clickId_1]==listImagesShuffle[clickId_2]){
+                    arrayShirt[clickId_1] = listImagesShuffle[clickId_1]
+                    arrayShirt[clickId_2] = listImagesShuffle[clickId_2]
+                }else{
+                   
+
+                }
+            }
         }else{
             let img = document.createElement('img');
             //img.src = listImages[i];
@@ -118,4 +147,5 @@ function onklickFunction(clickId) {
 }
 initGame();
 console.log(shufImg());
+
 
